@@ -1,3 +1,4 @@
 .ipynb_checkpoints
-foursquare_secrets.json
+secrets/*
 Segmenting_and_Clustering_Toronto.ipynb
+Data_Exploration_Messy.ipynb
