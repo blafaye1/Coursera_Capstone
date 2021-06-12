@@ -3,3 +3,4 @@ secrets/*
 venv
 sandbox/venv
 .idea
+organize_shape_files.sh
