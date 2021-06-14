@@ -4,3 +4,4 @@ venv
 sandbox/venv
 .idea
 organize_shape_files.sh
+__pycache__
