@@ -4,11 +4,11 @@ from pyproj import CRS, Transformer
 from scipy.optimize import minimize_scalar
 
 
-def wgs2merc(lat, lon):
+def gen_wgs2merc():
     crs_wgs = CRS("EPSG:4326")
     crs_merc = CRS("EPSG:3785")
     crs_transformer = Transformer.from_crs(crs_wgs, crs_merc)
-    return crs_transformer.transform(lat, lon)
+    return crs_transformer.transform
 
 
 def kil2mil(km):
