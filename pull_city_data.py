@@ -55,7 +55,7 @@ def geometry2patch(city_geometry):
         for polygon in city_geometry:
             poly_data = poly2patch(polygon)
             geometry_data['xs'].extend(poly_data['xs'])
-            geometry_data['xs'].extend(poly_data['ys'])
+            geometry_data['ys'].extend(poly_data['ys'])
 
     return geometry_data
 
@@ -89,7 +89,7 @@ def poly2patch(polygon):
     return geometry_data
 
 
-def plot_init_grid(city, state, f_out):
+def plot_init_grid(city, state, city_nickname):
     wgs2merc = gen_wgs2merc()
 
     default_increment = 0.01
@@ -100,14 +100,14 @@ def plot_init_grid(city, state, f_out):
         city_grid = {
             'lats': [],
             'lons': [],
-            'xs': [],
-            'ys': []
         }
         for poly in city_geometry:
             point_grid = construct_grid(poly, default_increment)
             city_grid['lats'].extend(point_grid['lats'])
             city_grid['lons'].extend(point_grid['lons'])
 
+    city_grid['xs'] = []
+    city_grid['ys'] = []
     for lat, lon in zip(city_grid['lats'], city_grid['lons']):
         x, y = wgs2merc(lat, lon)
         city_grid['xs'].append(x)
@@ -115,16 +115,26 @@ def plot_init_grid(city, state, f_out):
 
     polygon_points = geometry2patch(city_geometry)
 
-    output_file(f_out)
-    p = figure(x_axis_type="mercator", y_axis_type="mercator")
-    p.circle('xs', 'ys', source=city_grid)
+    p = figure(x_axis_type="mercator", y_axis_type="mercator", title="{0} Initial Grid".format(city),
+               x_axis_label='Longitude', y_axis_label='Latitude')
+
+    p.title.align = 'center'
+    p.title.text_font_size = '14pt'
+
+    p.xaxis.axis_label_text_font_style = 'bold'
+    p.yaxis.axis_label_text_font_style = 'bold'
+
+    color_choice = 'dodgerblue'
+    p.circle('xs', 'ys', source=city_grid, size=4, fill_color=color_choice, line_color=color_choice)
     p.multi_polygons(xs=[[polygon_points['xs']]],
                      ys=[[polygon_points['ys']]],
-                     alpha=0.5, color='green')
+                     alpha=0.6, color='gray')
 
     tile_provider = get_provider(Vendors.OSM)
     p.add_tile(tile_provider)
 
+    init_grid_f_out = "plots/init_grid_{0}.html".format(city_nickname)
+    output_file(init_grid_f_out)
     save(p)
     return city_grid
 
@@ -157,8 +167,7 @@ def call_fsq(city, city_nickname, state, cat_names=None):
     with open('variables/fsq_categories.json') as f_in:
         fsq_categories = json.load(f_in)
 
-    init_grid_f_out = "plots/init_grid_{0}.html".format(city_nickname)
-    city_grid = plot_init_grid(city, state, init_grid_f_out)
+    city_grid = plot_init_grid(city, state, city_nickname)
 
     venues_fname = "data/venues_results/{0}_venues_results.json".format(city_nickname)
     if os.path.isfile(venues_fname):
@@ -188,7 +197,9 @@ def call_fsq(city, city_nickname, state, cat_names=None):
 if __name__ == '__main__':
     # call_fsq('Chicago', 'chicago', 'illinois')
     # call_fsq('San Francisco', 'sf', 'california')
-    # call_fsq('New York', 'nyc', 'new_york')  # TODO: Finish calling NYC data
+    # call_fsq('New York', 'nyc', 'new_york')
 
-    # TODO: Regenerate init_grids for all three cities
+    plot_init_grid('San Francisco', 'california', 'sf')
+    plot_init_grid('Chicago', 'illinois', 'chicago')
+    plot_init_grid('New York', 'new_york', 'nyc')
     pass
