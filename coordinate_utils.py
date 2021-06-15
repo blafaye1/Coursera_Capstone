@@ -47,6 +47,8 @@ def gen_func_to_opt(start_lat, start_lon, var):
 
 
 def find_a_mile(start_lat, start_lon, var):
+    wgs2merc = gen_wgs2merc()
+
     func_to_opt = gen_func_to_opt(start_lat, start_lon, var)
     if var == 'lat':
         bounds = (start_lat, start_lat + 10)

@@ -3,9 +3,11 @@ import geopandas as gpd
 import requests
 import json
 import os
+from coordinate_utils import gen_wgs2merc
 from shapely import geometry
 from bokeh.io import output_file, save
 from bokeh.plotting import figure
+from bokeh.tile_providers import get_provider, Vendors
 
 
 def construct_grid(polygon, increment):
@@ -42,30 +44,54 @@ def define_city_geometry(city, state):
     return city_geometry
 
 
-def polygon2patch(city_geometry):
+def geometry2patch(city_geometry):
+    if isinstance(city_geometry, geometry.Polygon):
+        geometry_data = poly2patch(city_geometry)
+    else:
+        geometry_data = {
+            'xs': [],
+            'ys': []
+        }
+        for polygon in city_geometry:
+            poly_data = poly2patch(polygon)
+            geometry_data['xs'].extend(poly_data['xs'])
+            geometry_data['xs'].extend(poly_data['ys'])
+
+    return geometry_data
+
+
+def poly2patch(polygon):
+    wgs2merc = gen_wgs2merc()
+
     geometry_data = {
         'xs': [],
         'ys': []
     }
 
-    if isinstance(city_geometry, geometry.Polygon):
-        geometry_data['xs'].append([point[0] for point in city_geometry.exterior.coords])
-        geometry_data['ys'].append([point[1] for point in city_geometry.exterior.coords])
-        for ring in city_geometry.interiors:
-            geometry_data['xs'].append([point[0] for point in ring.coords])
-            geometry_data['ys'].append([point[1] for point in ring.coords])
-    else:
-        for polygon in city_geometry:
-            geometry_data['xs'].append([point[0] for point in polygon.exterior.coords])
-            geometry_data['ys'].append([point[1] for point in polygon.exterior.coords])
-            for ring in polygon.interiors:
-                geometry_data['xs'].append([point[0] for point in ring.coords])
-                geometry_data['ys'].append([point[1] for point in ring.coords])
+    exterior_list_x = []
+    exterior_list_y = []
+    for lon, lat in polygon.exterior.coords:
+        x, y = wgs2merc(lat, lon)
+        exterior_list_x.append(x)
+        exterior_list_y.append(y)
+    geometry_data['xs'].append(exterior_list_x)
+    geometry_data['ys'].append(exterior_list_y)
+    for ring in polygon.interiors:
+        ring_list_x = []
+        ring_list_y = []
+        for lon, lat in ring.coords:
+            x, y = wgs2merc(lat, lon)
+            ring_list_x.append(x)
+            ring_list_y.append(y)
+        geometry_data['xs'].append(ring_list_x)
+        geometry_data['ys'].append(ring_list_y)
 
     return geometry_data
 
 
 def plot_init_grid(city, state, f_out):
+    wgs2merc = gen_wgs2merc()
+
     default_increment = 0.01
     city_geometry = define_city_geometry(city, state)
     if isinstance(city_geometry, geometry.Polygon):
@@ -73,21 +99,31 @@ def plot_init_grid(city, state, f_out):
     else:
         city_grid = {
             'lats': [],
-            'lons': []
+            'lons': [],
+            'xs': [],
+            'ys': []
         }
         for poly in city_geometry:
             point_grid = construct_grid(poly, default_increment)
             city_grid['lats'].extend(point_grid['lats'])
             city_grid['lons'].extend(point_grid['lons'])
 
-    polygon_points = polygon2patch(city_geometry)
+    for lat, lon in zip(city_grid['lats'], city_grid['lons']):
+        x, y = wgs2merc(lat, lon)
+        city_grid['xs'].append(x)
+        city_grid['ys'].append(y)
+
+    polygon_points = geometry2patch(city_geometry)
 
     output_file(f_out)
-    p = figure()
-    p.circle('lons', 'lats', source=city_grid)
+    p = figure(x_axis_type="mercator", y_axis_type="mercator")
+    p.circle('xs', 'ys', source=city_grid)
     p.multi_polygons(xs=[[polygon_points['xs']]],
                      ys=[[polygon_points['ys']]],
                      alpha=0.5, color='green')
+
+    tile_provider = get_provider(Vendors.OSM)
+    p.add_tile(tile_provider)
 
     save(p)
     return city_grid
@@ -152,5 +188,7 @@ def call_fsq(city, city_nickname, state, cat_names=None):
 if __name__ == '__main__':
     # call_fsq('Chicago', 'chicago', 'illinois')
     # call_fsq('San Francisco', 'sf', 'california')
-    # call_fsq('New York', 'nyc', 'new_york')
+    # call_fsq('New York', 'nyc', 'new_york')  # TODO: Finish calling NYC data
+
+    # TODO: Regenerate init_grids for all three cities
     pass
