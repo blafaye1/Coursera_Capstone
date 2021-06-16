@@ -4,6 +4,7 @@ import json
 from bokeh.io import output_file, save
 from bokeh.plotting import figure
 from bokeh.layouts import column, row
+from bokeh.embed import components
 from bokeh.models import ColumnDataSource, Slider, CheckboxGroup, CustomJS, CDSView, HoverTool
 from bokeh.models.filters import CustomJSFilter
 from bokeh.tile_providers import get_provider, Vendors
@@ -142,12 +143,15 @@ def plot_venues(city, city_nickname, state, top_cats=None):
     f_out = "plots/venues_{0}.html".format(city_nickname)
     output_file(f_out)
     save(layout)
-    return
+
+    script, div = components(layout)
+
+    return script, div
 
 
 if __name__ == '__main__':
     plot_venues('San Francisco', 'sf', 'california')
-    plot_venues('Chicago', 'chicago', 'illinois')
-    plot_venues('New York', 'nyc', 'new_york')
+    # plot_venues('Chicago', 'chicago', 'illinois')
+    # plot_venues('New York', 'nyc', 'new_york')
 
     pass

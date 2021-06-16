@@ -7,6 +7,7 @@ from coordinate_utils import gen_wgs2merc
 from shapely import geometry
 from bokeh.io import output_file, save
 from bokeh.plotting import figure
+from bokeh.embed import components
 from bokeh.tile_providers import get_provider, Vendors
 
 
@@ -136,7 +137,10 @@ def plot_init_grid(city, state, city_nickname):
     init_grid_f_out = "plots/init_grid_{0}.html".format(city_nickname)
     output_file(init_grid_f_out)
     save(p)
-    return city_grid
+
+    script, div = components(p)
+
+    return city_grid, script, div
 
 
 def get_nearby_venues(lat, lon, category_ids, client_secret, client_id, fsq_version, radius=500, limit=100):
@@ -167,7 +171,7 @@ def call_fsq(city, city_nickname, state, cat_names=None):
     with open('variables/fsq_categories.json') as f_in:
         fsq_categories = json.load(f_in)
 
-    city_grid = plot_init_grid(city, state, city_nickname)
+    city_grid = plot_init_grid(city, state, city_nickname)[0]
 
     venues_fname = "data/venues_results/{0}_venues_results.json".format(city_nickname)
     if os.path.isfile(venues_fname):
