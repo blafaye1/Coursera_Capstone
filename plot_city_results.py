@@ -8,6 +8,7 @@ from bokeh.embed import components
 from bokeh.models import ColumnDataSource, Slider, CheckboxGroup, CustomJS, CDSView, HoverTool, TapTool, OpenURL
 from bokeh.models.filters import CustomJSFilter
 from bokeh.tile_providers import get_provider, Vendors
+from bokeh.util.browser import view
 
 
 def convert_alphanum(word):
@@ -95,7 +96,7 @@ def make_plot(city, state, buffer_perc=0.0008):
 
     tap = TapTool(names=["annulus"], callback=OpenURL(url='@urls'))
     hover = HoverTool(names=["annulus"], tooltips=[('Name', '@names')])
-    # p.add_tools(tap)
+    p.add_tools(tap)
     p.add_tools(hover)
 
     p = style(p)
