@@ -95,7 +95,7 @@ def make_plot(city, state, buffer_perc=0.0008):
 
     tap = TapTool(names=["annulus"], callback=OpenURL(url='@urls'))
     hover = HoverTool(names=["annulus"], tooltips=[('Name', '@names')])
-    p.add_tools(tap)
+    # p.add_tools(tap)
     p.add_tools(hover)
 
     p = style(p)
