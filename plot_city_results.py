@@ -5,9 +5,17 @@ from bokeh.io import output_file, save
 from bokeh.plotting import figure
 from bokeh.layouts import column, row
 from bokeh.embed import components
-from bokeh.models import ColumnDataSource, Slider, CheckboxGroup, CustomJS, CDSView, HoverTool
+from bokeh.models import ColumnDataSource, Slider, CheckboxGroup, CustomJS, CDSView, HoverTool, TapTool, OpenURL
 from bokeh.models.filters import CustomJSFilter
 from bokeh.tile_providers import get_provider, Vendors
+
+
+def convert_alphanum(word):
+    word_to_return = ''
+    for letter in word:
+        if letter.isalnum():
+            word_to_return += letter
+    return word_to_return
 
 
 def make_dataset(city_venues_results, top_cats):
@@ -20,14 +28,18 @@ def make_dataset(city_venues_results, top_cats):
         'x_coords': [],
         'y_coords': [],
         'categories': [],
-        'names': []
+        'names': [],
+        'urls': []
     }
+
+    venue_url_base = "https://www.foursquare.com/v/"
 
     for venue in city_venues_results:
         items_list = venue['response']['groups'][0]['items']
         for item in items_list:
             item_id = item['venue']['id']
             item_category = item['venue']['categories'][0]['name']
+            item_name = item['venue']['name']
             if item_id in unique_ids or item_category not in top_cats:
                 continue
             else:
@@ -35,7 +47,10 @@ def make_dataset(city_venues_results, top_cats):
                 city_data['categories'].append(item_category)
                 city_data['latitudes'].append(item['venue']['location']['lat'])
                 city_data['longitudes'].append(item['venue']['location']['lng'])
-                city_data['names'].append(item['venue']['name'])
+                city_data['names'].append(item_name)
+
+                formatted_name = '-'.join([convert_alphanum(word) for word in item_name.split()])
+                city_data['urls'].append("{0}{1}/{2}".format(venue_url_base, formatted_name, item_id))
 
     wgs2merc = gen_wgs2merc()
     for lat, lon in zip(city_data['latitudes'], city_data['longitudes']):
@@ -78,7 +93,9 @@ def make_plot(city, state, buffer_perc=0.0008):
     tile_provider = get_provider(Vendors.OSM)
     p.add_tile(tile_provider)
 
+    tap = TapTool(names=["annulus"], callback=OpenURL(url='@urls'))
     hover = HoverTool(names=["annulus"], tooltips=[('Name', '@names')])
+    p.add_tools(tap)
     p.add_tools(hover)
 
     p = style(p)
@@ -150,7 +167,7 @@ def plot_venues(city, city_nickname, state, top_cats=None):
 
 
 if __name__ == '__main__':
-    plot_venues('San Francisco', 'sf', 'california')
+    # plot_venues('San Francisco', 'sf', 'california')
     # plot_venues('Chicago', 'chicago', 'illinois')
     # plot_venues('New York', 'nyc', 'new_york')
 
