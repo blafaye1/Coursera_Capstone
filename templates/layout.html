@@ -19,10 +19,29 @@
     <div class="container">
             <header class="d-flex justify-content-center py-3">
                 <ul class="nav nav-pills">
+                    {% if page == "home": %}
+                    <li class="nav-item"><a href="/" class="nav-link active" aria-current="page">Home</a></li>
+                    {% else %}
                     <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                    {% endif %}
+
+                    {% if page == "about": %}
+                    <li class="nav-item"><a href="/about" class="nav-link active" aria-current="page">About</a></li>
+                    {% else %}
                     <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+                    {% endif %}
+
+                    {% if page == "init": %}
+                    <li class="nav-item"><a href="/plot_init" class="nav-link active" aria-current="page">Initial</a></li>
+                    {% else %}
                     <li class="nav-item"><a href="/plot_init" class="nav-link">Initial</a></li>
+                    {% endif %}
+
+                    {% if page == "full": %}
                     <li class="nav-item"><a href="/plot_full" class="nav-link active" aria-current="page">Full</a></li>
+                    {% else %}
+                    <li class="nav-item"><a href="/plot_full" class="nav-link">Full</a></li>
+                    {% endif %}
                 </ul>
             </header>
         </div>

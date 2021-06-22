@@ -7,24 +7,24 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return render_template('home.html')
+    return render_template('home.html', page="home")
 
 
 @app.route("/about")
 def about():
-    return render_template('about.html')
+    return render_template('about.html', page="about")
 
 
 @app.route("/plot_init")
 def plot_init():
     city_grid, script, div = plot_init_grid('San Francisco', 'california', 'sf')
-    return render_template('plot_init.html', script=script, div=div)
+    return render_template('plot_init.html', script=script, div=div, page="init")
 
 
 @app.route("/plot_full")
 def plot_full():
     script, div = plot_venues('San Francisco', 'sf', 'california')
-    return render_template('plot_full.html', script=script, div=div)
+    return render_template('plot_full.html', script=script, div=div, page="full")
 
 
 if __name__ == '__main__':
