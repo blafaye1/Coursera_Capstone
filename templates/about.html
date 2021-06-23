@@ -1,5 +1,25 @@
 {% extends 'layout.html' %}
 
+{% block script %}
+{{ script|safe }}
+{% endblock %}
+
 {% block content %}
-<h1>About this project: </h1>
+<h1>About this page:</h1>
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h3>Here we examine access to grocery stores across different cities using Foursquare data.</h3>
+    </div>
+    <div class="row">
+      <div class="col">
+        Using Chicago as an example, I constructed a grid of latitude/longitude points across the city.
+      </div>
+      <div class="col">
+        {{ div|safe }}
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

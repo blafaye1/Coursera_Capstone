@@ -1,6 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from pull_city_data import plot_init_grid
 from plot_city_results import plot_venues
+from city_name_utils import get_city_state
 
 app = Flask(__name__)
 
@@ -12,7 +13,8 @@ def home():
 
 @app.route("/about")
 def about():
-    return render_template('about.html', page="about")
+    chicago_city_grid, chicago_script, chicago_div = plot_init_grid('Chicago', 'illinois', 'chicago')
+    return render_template('about.html', script=chicago_script, div=chicago_div, page="about")
 
 
 @app.route("/plot_init")
@@ -23,7 +25,11 @@ def plot_init():
 
 @app.route("/plot_full")
 def plot_full():
-    script, div = plot_venues('San Francisco', 'sf', 'california')
+    city_nickname = request.args.get('city')
+    if not city_nickname:
+        city_nickname = 'sf'
+    city, state = get_city_state(city_nickname)
+    script, div = plot_venues(city, city_nickname, state)
     return render_template('plot_full.html', script=script, div=div, page="full")
 
 

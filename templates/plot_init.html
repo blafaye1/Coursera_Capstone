@@ -5,5 +5,15 @@
 {% endblock %}
 
 {% block div %}
-{{ div|safe }}
+<div class="container">
+  <div class="row">
+    <div class="col">
+        <h1></h1>
+        This graph shows the latitude/longitude coordinates that I used for each Foursquare Venues call.
+    </div>
+    <div class="col-8">
+      {{ div|safe }}
+    </div>
+  </div>
+</div>
 {% endblock %}

@@ -8,7 +8,7 @@ from bokeh.embed import components
 from bokeh.models import ColumnDataSource, Slider, CheckboxGroup, CustomJS, CDSView, HoverTool, TapTool, OpenURL
 from bokeh.models.filters import CustomJSFilter
 from bokeh.tile_providers import get_provider, Vendors
-from bokeh.util.browser import view
+# from bokeh.util.browser import view
 
 
 def convert_alphanum(word):

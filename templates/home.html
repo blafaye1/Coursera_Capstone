@@ -2,4 +2,19 @@
 
 {% block content %}
 <h1>This is the home page.</h1>
+
+<h3>Select a city</h3>
+
+<div class="btn-group">
+  <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    Select a City
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="/plot_full?city=sf">San Francisco</a></li>
+    <li><a class="dropdown-item" href="/plot_full?city=chicago">Chicago</a></li>
+    <li><a class="dropdown-item" href="/plot_full?city=nyc">New York City</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="/about">Suggest a City</a></li>
+  </ul>
+</div>
 {% endblock %}
