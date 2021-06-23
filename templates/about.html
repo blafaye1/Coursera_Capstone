@@ -14,7 +14,15 @@
     </div>
     <div class="row">
       <div class="col">
-        Using Chicago as an example, I constructed a grid of latitude/longitude points across the city.
+        <ol>
+        <li>Choose 3 metropolitan cities. Idea/motivation: Which neighborhoods have best access to healthy food, specifically in the form of grocery stores.</li>
+        <li>Grab their shape files (Cartographic Boundary Files) from US Census. Defines the shape of the city as a polygon of latitude and longitude points.</li>
+        <li>Using the edges of the polygon, define a regularly spaced grid of points within each city. These are the points we use to call the Foursquare API.</li>
+        <li>Call Foursquare API venues endpoint. For each point, return up to 100 venues within 750 miles. I restricted the search to a few categories: Food & Drink Shops (which include grocery stores and liquor stores) and Fruit and Vegetable Stores.</li>
+        <li>Clean the data: Remove duplicates by using unique Foursquare Venue IDs. The radius for each call was chosen so there would be overlap and no venues would be missed. Extract features including the latitude/longitude location, name, category, and id of each venue.</li>
+        <li>Use Bokeh to plot each venue with variable radius around it and user choice of which categories of venues to visualize. Radius is defined as the crow flies. Intended usage: Adjust radius to 1 mile (for example). Areas that are not colored green in the city are farther than 1 mile away from a grocery store. Hovering over a circle shows the name of the venue. Clicking on a venue on the map takes you to the Foursquare link for that venue.</li>
+        <li>Next steps: Use census data to extract socioeconomic features for each neighborhood. Use these factors to predict whether a given address is likely to be closer to a "healthy store" (e.g. grocery store or fruit and vegetable store) or an "unhealthy store" (e.g. convenience store, liquor store, gas station).</li>
+        </ol>
       </div>
       <div class="col">
         {{ div|safe }}

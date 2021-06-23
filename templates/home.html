@@ -10,9 +10,11 @@
     Select a City
   </button>
   <ul class="dropdown-menu">
-    <li><a class="dropdown-item" href="/plot_full?city=sf">San Francisco</a></li>
-    <li><a class="dropdown-item" href="/plot_full?city=chicago">Chicago</a></li>
-    <li><a class="dropdown-item" href="/plot_full?city=nyc">New York City</a></li>
+
+    {% for name, nickname in cities_list: %}
+    <li><a class="dropdown-item" href="/plot_full?city={{nickname}}">{{name}}</a></li>
+    {% endfor %}
+
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="/about">Suggest a City</a></li>
   </ul>
