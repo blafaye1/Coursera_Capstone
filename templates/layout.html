@@ -7,6 +7,7 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.3.2.min.js"></script>
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.2.min.js"></script>
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.3.2.min.js"></script>
@@ -16,35 +17,35 @@
     <title>Find the Food</title>
 </head>
 <body>
-    <div class="container">
-            <header class="d-flex justify-content-center py-3">
-                <ul class="nav nav-pills">
-                    {% if page == "home": %}
-                    <li class="nav-item"><a href="/" class="nav-link active" aria-current="page">Home</a></li>
-                    {% else %}
-                    <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
-                    {% endif %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand">Find the Food</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+              <div class="navbar-nav me-auto mb-2 mb-lg-0">
+                  {% if page == "home": %}
+                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                  {% else %}
+                    <a class="nav-link" href="/">Home</a>
+                  {% endif %}
 
-                    {% if page == "about": %}
-                    <li class="nav-item"><a href="/about" class="nav-link active" aria-current="page">About</a></li>
-                    {% else %}
-                    <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
-                    {% endif %}
-
-                    {% if page == "init": %}
-                    <li class="nav-item"><a href="/plot_init" class="nav-link active" aria-current="page">Initial</a></li>
-                    {% else %}
-                    <li class="nav-item"><a href="/plot_init" class="nav-link">Initial</a></li>
-                    {% endif %}
-
-                    {% if page == "full": %}
-                    <li class="nav-item"><a href="/plot_full" class="nav-link active" aria-current="page">Full</a></li>
-                    {% else %}
-                    <li class="nav-item"><a href="/plot_full" class="nav-link">Full</a></li>
-                    {% endif %}
-                </ul>
-            </header>
+                  {% if page == "about": %}
+                    <a class="nav-link active" aria-current="page" href="/about">About</a>
+                  {% else %}
+                    <a class="nav-link" href="/about">About</a>
+                  {% endif %}
+              </div>
+                <span class="nav-item">
+                    <a class="navbar-brand" href="https://www.github.com/blafaye1/find-the-food"><i class="bi bi-github" style="color: cornflowerblue;"></i></a>
+                    <a class="navbar-brand" href="https://www.linkedin.com/blafaye1"><i class="bi bi-linkedin"></i></a>
+                    <a class="navbar-brand" href="https://www.musical-shares.herokuapp.com"><i class="bi bi-music-note-list"></i></a>
+                    <a class="navbar-brand" href="/contact"><i class="bi bi-envelope"></i></a>
+                </span>
+            </div>
         </div>
+    </nav>
 
     {% block div %}{% endblock %}
 

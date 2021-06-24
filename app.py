@@ -19,6 +19,11 @@ def about():
     return render_template('about.html', script=chicago_script, div=chicago_div, page="about")
 
 
+@app.route("/contact")
+def contact():
+    return render_template('contact.html')
+
+
 @app.route("/plot_init")
 def plot_init():
     city_grid, script, div = plot_init_grid('San Francisco', 'california', 'sf')

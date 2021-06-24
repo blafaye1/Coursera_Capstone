@@ -136,7 +136,7 @@ def plot_init_grid(city, state, city_nickname):
 
     init_grid_f_out = "plots/init_grid_{0}.html".format(city_nickname)
     output_file(init_grid_f_out)
-    save(p)
+    # save(p)
 
     script, div = components(p)
 

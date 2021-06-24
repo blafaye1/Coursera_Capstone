@@ -159,7 +159,7 @@ def plot_venues(city, city_nickname, state, top_cats=None):
 
     f_out = "plots/venues_{0}.html".format(city_nickname)
     output_file(f_out)
-    save(layout)
+    # save(layout)
 
     script, div = components(layout)
 
