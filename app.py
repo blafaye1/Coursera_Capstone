@@ -24,12 +24,6 @@ def contact():
     return render_template('contact.html')
 
 
-@app.route("/plot_init")
-def plot_init():
-    city_grid, script, div = plot_init_grid('San Francisco', 'california', 'sf')
-    return render_template('plot_init.html', script=script, div=div, page="init")
-
-
 @app.route("/plot_full")
 def plot_full():
     city_nickname = request.args.get('city')
@@ -39,7 +33,8 @@ def plot_full():
     script, div = plot_venues(city, city_nickname, state)
     city_nicknames_list = get_city_list()
     cities_list = [(get_city_state(nickname)[0], nickname) for nickname in city_nicknames_list]
-    return render_template('plot_full.html', script=script, div=div, cities_list=cities_list, page="full")
+    return render_template('plot_full.html', script=script, div=div, cities_list=cities_list,
+                           page="full")
 
 
 if __name__ == '__main__':

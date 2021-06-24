@@ -121,7 +121,7 @@ def plot_venues(city, city_nickname, state, top_cats=None):
     max_lat, max_lon = src.data['latitudes'][-1], src.data['longitudes'][-1]
     avg_city_mile = find_avg_city_mile(min_lat, min_lon, max_lat, max_lon)
 
-    slider = Slider(start=0, end=1, step=0.01, value=0.5, title="Radius (miles)")
+    slider = Slider(start=0, end=1.5, step=0.01, value=0.5, title="Radius (miles)")
 
     category_selection = CheckboxGroup(labels=top_cats, active=[0])
     category_selection.js_on_change("active",
@@ -155,7 +155,7 @@ def plot_venues(city, city_nickname, state, top_cats=None):
                                  code="other.outer_radius = factor * this.value"))
 
     controls = column(category_selection, slider)
-    layout = row(controls, p)
+    layout = row(p, controls)
 
     f_out = "plots/venues_{0}.html".format(city_nickname)
     output_file(f_out)

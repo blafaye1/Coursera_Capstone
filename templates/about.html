@@ -5,28 +5,47 @@
 {% endblock %}
 
 {% block content %}
-<h1>About this project:</h1>
-
-<div class="container">
+<div class="container my-md-4">
+  <div class="row">
+    <h1>About this project:</h1>
+  </div>
   <div class="row">
     <div class="col">
-      <h3>Here we examine access to grocery stores across different cities using Foursquare data.</h3>
+      <h3>Methodology</h3>
+      <ul>
+        <li>I chose 3 metropolitan cities to start:
+          <ul>
+            <li>San Francisco, CA</li>
+            <li>Chicago, IL</li>
+            <li>New York City, NY</li>
+          </ul>
+        </li>
+        <li>For each city, I used a Cartographic Boundary File from <a href="https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html">the US Census</a> to define a polygon of the edges of the city. This is shown by the gray patch on the plot to the right.</li>
+        <li>Within the polygon, I defined a regularly spaced grid of latitude/longitude coordinates. These are represented by the blue dots.</li>
+        <li>For each point in the grid, I called the Foursquare API venues search endpoint. I used a radius of 750 meters to ensure complete coverage of the city polygon, and restricted the search to the Foursquare categories <b>Food & Drink Shop</b> and <b>Fruit and Vegetable Store</b>, each of which contained a variety of subcategories.</li>
+        <li>I removed duplicates by checking for unique Foursquare venue ids. Additionally, I only kept venues from the categories <b>Grocery Store</b>, <b>Liquor Store</b>, <b>Supermarket</b>, <b>Food & Drink Shop</b>, and <b>Health Food Store</b> based on their perceived relevance and the percentage of venues belonging to those categories.</li>
+      </ul>
+      <h3>Understanding venue plots</h3>
+      <ul>
+        <li>
+          Each venue plot contains 3 layers:
+        <ul><li>A patch that represents the outline of the city</li>
+            <li>A dot at the latitude/longitude coordinates of each venue location</li>
+            <li>A circle with variable radius centered at each venue dot (radius is defined as the crow flies)</li></ul>
+        </li>
+        <li>Hovering over a circle shows the name of that venue, while clicking on the circle redirects to the Foursquare venue website.</li>
+        <li>For a given radius (e.g. 1 mile) and selection of categories (e.g. Grocery Store), any point on the map not covered by a green circle is more than 1 mile away from the nearest grocery store.</li>
+      </ul>
+      <h3>Next steps</h3>
+      <ul>
+        <li>I am currently working on matching socioeconomic features from the census to each city.</li>
+        <li>I will then build a machine learning model to predict whether different points in the city are closer to "healthy" stores (e.g. Grocery Store, Fruit and Vegetable Store) or "unhealthy" stores (e.g. Liquor Store, Fast Food Restaurant).</li>
+        <li>This will allow me to draw conclusions about which neighborhoods in these metropolitan cities are underserved or lack easy access to healthy food options.</li>
+        <li>I also plan to perform similar analysis for more suburban or rural cities and examine how the corresponding average distance from a grocery store changes.</li>
+      </ul>
     </div>
-    <div class="row">
-      <div class="col">
-        <ol>
-        <li>Choose 3 metropolitan cities. Idea/motivation: Which neighborhoods have best access to healthy food, specifically in the form of grocery stores.</li>
-        <li>Grab their shape files (Cartographic Boundary Files) from US Census. Defines the shape of the city as a polygon of latitude and longitude points.</li>
-        <li>Using the edges of the polygon, define a regularly spaced grid of points within each city. These are the points we use to call the Foursquare API.</li>
-        <li>Call Foursquare API venues endpoint. For each point, return up to 100 venues within 750 miles. I restricted the search to a few categories: Food & Drink Shops (which include grocery stores and liquor stores) and Fruit and Vegetable Stores.</li>
-        <li>Clean the data: Remove duplicates by using unique Foursquare Venue IDs. The radius for each call was chosen so there would be overlap and no venues would be missed. Extract features including the latitude/longitude location, name, category, and id of each venue.</li>
-        <li>Use Bokeh to plot each venue with variable radius around it and user choice of which categories of venues to visualize. Radius is defined as the crow flies. Intended usage: Adjust radius to 1 mile (for example). Areas that are not colored green in the city are farther than 1 mile away from a grocery store. Hovering over a circle shows the name of the venue. Clicking on a venue on the map takes you to the Foursquare link for that venue.</li>
-        <li>Next steps: Use census data to extract socioeconomic features for each neighborhood. Use these factors to predict whether a given address is likely to be closer to a "healthy store" (e.g. grocery store or fruit and vegetable store) or an "unhealthy store" (e.g. convenience store, liquor store, gas station).</li>
-        </ol>
-      </div>
-      <div class="col">
-        {{ div|safe }}
-      </div>
+    <div class="col">
+      {{ div|safe }}
     </div>
   </div>
 </div>
