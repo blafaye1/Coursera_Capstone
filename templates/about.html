@@ -1,52 +1,55 @@
 {% extends 'layout.html' %}
 
 {% block script %}
-{{ script|safe }}
+{{ script_1|safe }}
+{{ script_2|safe }}
 {% endblock %}
 
 {% block content %}
+
 <div class="container my-md-4">
   <div class="row">
     <h1>About this project:</h1>
   </div>
   <div class="row">
     <div class="col">
-      <h3>Methodology</h3>
-      <ul>
-        <li>I chose 3 metropolitan cities to start:
-          <ul>
-            <li>San Francisco, CA</li>
-            <li>Chicago, IL</li>
-            <li>New York City, NY</li>
-          </ul>
-        </li>
-        <li>For each city, I used a Cartographic Boundary File from <a href="https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html">the US Census</a> to define a polygon of the edges of the city. This is shown by the gray patch on the plot to the right.</li>
-        <li>Within the polygon, I defined a regularly spaced grid of latitude/longitude coordinates. These are represented by the blue dots.</li>
-        <li>For each point in the grid, I called the Foursquare API venues search endpoint. I used a radius of 750 meters to ensure complete coverage of the city polygon, and restricted the search to the Foursquare categories <b>Food & Drink Shop</b> and <b>Fruit and Vegetable Store</b>, each of which contained a variety of subcategories.</li>
-        <li>I removed duplicates by checking for unique Foursquare venue ids. Additionally, I only kept venues from the categories <b>Grocery Store</b>, <b>Liquor Store</b>, <b>Supermarket</b>, <b>Food & Drink Shop</b>, and <b>Health Food Store</b> based on their perceived relevance and the percentage of venues belonging to those categories.</li>
-      </ul>
-      <h3>Understanding venue plots</h3>
-      <ul>
-        <li>
-          Each venue plot contains 3 layers:
-        <ul><li>A patch that represents the outline of the city</li>
-            <li>A dot at the latitude/longitude coordinates of each venue location</li>
-            <li>A circle with variable radius centered at each venue dot (radius is defined as the crow flies)</li></ul>
-        </li>
-        <li>Hovering over a circle shows the name of that venue, while clicking on the circle redirects to the Foursquare venue website.</li>
-        <li>For a given radius (e.g. 1 mile) and selection of categories (e.g. Grocery Store), any point on the map not covered by a green circle is more than 1 mile away from the nearest grocery store.</li>
-      </ul>
-      <h3>Next steps</h3>
-      <ul>
-        <li>I am currently working on matching socioeconomic features from the census to each city.</li>
-        <li>I will then build a machine learning model to predict whether different points in the city are closer to "healthy" stores (e.g. Grocery Store, Fruit and Vegetable Store) or "unhealthy" stores (e.g. Liquor Store, Fast Food Restaurant).</li>
-        <li>This will allow me to draw conclusions about which neighborhoods in these metropolitan cities are underserved or lack easy access to healthy food options.</li>
-        <li>I also plan to perform similar analysis for more suburban or rural cities and examine how the corresponding average distance from a grocery store changes.</li>
-      </ul>
-    </div>
-    <div class="col">
-      {{ div|safe }}
+      <h3>Motivation</h3>
+      <p>A few months ago, I moved to a new apartment in San Francisco. I'm trying to cook more often and I don't have a car, so my biggest consideration was walking distance to a grocery store. After I found an amazing place with only a 3 minute walk to the local Safeway, I wondered if there were any neighborhoods where I wouldn't have been so lucky, and Find the Food was born. The first iteration of this tool uses Foursquare's venues database to look at various categories of food and grocery stores in three metropolitan cities: San Francisco, Chicago, and NYC. Keep reading below to see an outline of my methodology, understand the components of the venue plots, and learn about what else I have planned for this tool.</p>
     </div>
   </div>
+  <div class="row">
+    <h3>Methodology</h3>
+    <div class="col">
+      <p>For each city, I used a Cartographic Boundary File from <a href="https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html">the US Census</a> to define a polygon of the edges of the city. This is shown by the gray patch on the plot to the right.</p>
+      <p>Within the polygon, I defined a regularly spaced grid of latitude/longitude coordinates. These are represented by the blue dots.</p>
+      <p>For each point in the grid, I called the Foursquare API venues search endpoint. I used a radius of 750 meters to ensure complete coverage of the city polygon, and restricted the search to the Foursquare categories <b>Food & Drink Shop</b> and <b>Fruit and Vegetable Store</b>, each of which contained a variety of subcategories.</p>
+      <p>I removed duplicates by checking for unique Foursquare venue ids. Additionally, I only kept venues from the categories <b>Grocery Store</b>, <b>Liquor Store</b>, <b>Supermarket</b>, <b>Food & Drink Shop</b>, and <b>Health Food Store</b> based on their perceived relevance and the percentage of venues belonging to those categories.</p>
+    </div>
+    <div class="col">
+      {{ div_1|safe }}
+    </div>
+  </div>
+  <div class="row">
+    <h3>Understanding venue plots</h3>
+    <div class="col">
+      <p>
+        Each venue plot contains 3 layers:
+      <ul><li>A patch that represents the outline of the city</li>
+          <li>A dot at the latitude/longitude coordinates of each venue location</li>
+          <li>A circle with variable radius centered at each venue dot (radius is defined as the crow flies)</li></ul>
+      </p>
+      <p>Hovering over a circle shows the name of that venue, while clicking on the circle redirects to the Foursquare venue website.</p>
+      <p>For a given radius (e.g. 1 mile) and selection of categories (e.g. Grocery Store), any point on the map not covered by a green circle is more than 1 mile away from the nearest grocery store.</p>
+      {{ div_2|safe }}
+    </div>
+  </div>
+  <div class="row my-md-4">
+    <h3>Next steps</h3>
+    <p>I am currently working on matching socioeconomic features from the census to each city.</p>
+    <p>I will then build a machine learning model to predict whether different points in the city are closer to "healthy" stores (e.g. Grocery Store, Fruit and Vegetable Store) or "unhealthy" stores (e.g. Liquor Store, Fast Food Restaurant).</p>
+    <p>This will allow me to draw conclusions about which neighborhoods in these metropolitan cities are underserved or lack easy access to healthy food options.</p>
+    <p>I also plan to perform similar analysis for more suburban or rural cities and examine how the corresponding average distance from a grocery store changes.</p>
+  </div>
 </div>
+
 {% endblock %}

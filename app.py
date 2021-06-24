@@ -15,8 +15,9 @@ def home():
 
 @app.route("/about")
 def about():
-    chicago_city_grid, chicago_script, chicago_div = plot_init_grid('Chicago', 'illinois', 'chicago')
-    return render_template('about.html', script=chicago_script, div=chicago_div, page="about")
+    chicago_city_grid, script_1, div_1 = plot_init_grid('Chicago', 'illinois', 'chicago')
+    script_2, div_2 = plot_venues('Chicago', 'chicago', 'illinois')
+    return render_template('about.html', script_1=script_1, div_1=div_1, script_2=script_2, div_2=div_2, page="about")
 
 
 @app.route("/contact")
